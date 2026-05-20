@@ -1,0 +1,65 @@
+{
+  "name": "web-prodeeplinks",
+  "version": "0.1.0",
+  "description": "Secure deep linking SDK with license validation and browser fingerprinting for web apps (React, Next.js, Vue, etc.)",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./next": {
+      "types": "./lib/next.d.ts",
+      "default": "./lib/next.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "deeplink",
+    "deep-link",
+    "web",
+    "browser",
+    "fingerprint",
+    "license",
+    "react",
+    "nextjs",
+    "next.js",
+    "vue",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "next": ">=13.0.0",
+    "react": ">=17.0.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/2ndGenTech/web-prodeeplinks.git"
+  },
+  "sideEffects": false
+}
