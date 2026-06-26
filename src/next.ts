@@ -27,7 +27,7 @@ export interface UseProDeepLinkResult {
  *
  * export function DeepLinkHandler() {
  *   const { loading, result } = useProDeepLink({
- *     licenseKey: process.env.NEXT_PUBLIC_PRODEEPLINKS_KEY!,
+ *     apiKey: process.env.NEXT_PUBLIC_PRODEEPLINKS_KEY!,
  *   });
  *
  *   if (loading) return null;
@@ -85,7 +85,7 @@ export function useProDeepLink(options: UseProDeepLinkOptions): UseProDeepLinkRe
     return () => {
       cancelled = true;
     };
-  }, [autoResolve, initConfig.licenseKey, initConfig.appVersion, initConfig.apiBaseUrl]);
+  }, [autoResolve, initConfig.apiKey, initConfig.licenseKey, initConfig.appVersion, initConfig.apiBaseUrl]);
 
   return {
     loading,

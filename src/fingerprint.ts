@@ -1,4 +1,28 @@
-import { BrowserFingerprint } from './types';
+import { BrowserFingerprint, FingerprintMatchPayload } from './types';
+
+const DEVICE_ID_KEY = 'pdl_device_id';
+
+function getOrCreateDeviceId(): string {
+  if (typeof window === 'undefined') {
+    return 'ssr';
+  }
+
+  try {
+    const existing = window.localStorage.getItem(DEVICE_ID_KEY);
+    if (existing) {
+      return existing;
+    }
+
+    const id =
+      typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `web_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    window.localStorage.setItem(DEVICE_ID_KEY, id);
+    return id;
+  } catch {
+    return `web_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  }
+}
 
 function parseOsFromUserAgent(userAgent: string): { os: string; version: string } {
   const ua = userAgent.toLowerCase();
@@ -70,6 +94,7 @@ export function generateBrowserFingerprint(appVersion = 'web'): BrowserFingerpri
     platform: os,
     osVersion: version,
     deviceModel: parseDeviceModel(userAgent, os),
+    deviceId: getOrCreateDeviceId(),
     screenResolution: `${screenWidth}x${screenHeight}`,
     screenWidth,
     screenHeight,
@@ -117,4 +142,30 @@ export function getInitialUrlFromPage(): string | null {
 
 export function isBrowserEnvironment(): boolean {
   return typeof window !== 'undefined' && typeof document !== 'undefined';
+}
+
+export function buildFingerprintMatchPayload(
+  fingerprint: BrowserFingerprint,
+  customerUserId?: string | null
+): FingerprintMatchPayload {
+  return {
+    basic: {
+      userAgent: fingerprint.userAgent,
+      language: fingerprint.language || 'en',
+      platform: fingerprint.platform,
+      screenResolution: fingerprint.screenResolution,
+      timezone: fingerprint.timezone || '',
+      timezoneOffset: new Date().getTimezoneOffset(),
+    },
+    network: {
+      ipAddress: fingerprint.ipAddress || '',
+      connectionType: fingerprint.connectionType || '',
+    },
+    device: {
+      deviceModel: fingerprint.deviceModel,
+      osVersion: fingerprint.osVersion,
+      appVersion: fingerprint.appVersion,
+    },
+    ...(customerUserId ? { customerUserId } : {}),
+  };
 }
